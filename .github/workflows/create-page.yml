@@ -1,0 +1,46 @@
+name: Create Tomorrow Page
+on:
+  schedule:
+    - cron: '35 18 * * *'  # Daily 12:05 AM IST
+  workflow_dispatch:
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Page
+        run: |
+          python3 << 'PY'
+          import datetime
+          tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+          # Friday = Suvarna Keralam, Saturday = Karunya, Sunday = Samrudhi etc
+          schedule = {
+            0: ("Bhagyathara", "BT"),
+            1: ("Sthree Sakthi", "SS"),
+            2: ("Dhanalekshmi", "DL"),
+            3: ("Karunya Plus", "KN"),
+            4: ("Suvarna Keralam", "SK"),
+            5: ("Karunya", "KR"),
+            6: ("Samrudhi", "SM"),
+          }
+          name, code = schedule[tomorrow.weekday()]
+          # Simple number - nee manual aayi thirutham, page enkilum undaakum
+          filename = f"{name.replace(' ','')}-{tomorrow.strftime('%d-%m-%Y')}Result.html"
+          with open("KarunyaPlusKN-650Result.html", "r", encoding="utf-8") as f:
+              content = f.read()
+          content = content.replace("Karunya Plus KN-650", f"{name} - {tomorrow.strftime('%d-%m-%Y')}")
+          content = content.replace("KarunyaPlusKN-650", name.replace(' ',''))
+          with open(filename, "w", encoding="utf-8") as f:
+              f.write(content)
+          print(f"Created {filename}")
+          PY
+      - name: Save
+        run: |
+          git config user.name "Auto Bot"
+          git config user.email "bot@keralalive.com"
+          git add .
+          git commit -m "Auto create tomorrow page" || echo "No change"
+          git push
