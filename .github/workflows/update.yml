@@ -15,15 +15,15 @@ jobs:
           python-version: '3.11'
       - name: Clean Only
         run: |
-          python -c "
-          html = open('KarunyaPlusKN-650Result.html', encoding='utf-8').read()
-          bad = ['Skip to content','Menu','Home','updated daily at 3:00 PM','weekly chart','monthly chart','guessing numbe','Kerala Jackpot','Result Chart']
-          for b in bad:
-    lines = [l for l in html.splitlines() if b not in l]
-    html = '\n'.join(lines)
-    open('KarunyaPlusKN-650Result.html','w',encoding='utf-8').write(html)
+          python3 << 'PY'
+          import pathlib
+          p = pathlib.Path('KarunyaPlusKN-650Result.html')
+          html = p.read_text(encoding='utf-8')
+          bad = ['Skip to content', 'Menu', 'updated daily']
+          lines = [l for l in html.splitlines() if not any(b in l for b in bad)]
+          p.write_text('\n'.join(lines), encoding='utf-8')
           print('Cleaned OK')
-          "
+          PY
       - name: Save
         run: |
           git config user.name 'bot'
