@@ -1,10 +1,13 @@
-name: Auto Lottery Update
+name: Lottery Update
+
 on:
   schedule:
     - cron: '45 9 * * *'
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -13,23 +16,57 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
       - name: Fetch Result
         run: |
           pip install requests beautifulsoup4
           python -c "
-          import requests
+          import requests, re, json, os
           from bs4 import BeautifulSoup
+          from datetime import datetime
+
           try:
-              r = requests.get('https://www.keralalottery.info/', timeout=20, headers={'User-Agent':'Mozilla/5.0'})
+              r = requests.get('https://www.keralalottery.info/', timeout=30, headers={'User-Agent':'Mozilla/5.0'})
               print('Fetched', r.status_code)
-              print(r.text[:2000])
+              soup = BeautifulSoup(r.text, 'html.parser')
+              text = soup.get_text(' ', strip=True)
+              print(text[:3000])
+
+              numbers = re.findall(r'\b[A-Z]{1,2}\s*\d{6}\b', text)
+              print('Found numbers:', numbers)
+
+              data = {
+                  'date': datetime.now().strftime('%d-%m-%Y'),
+                  'updated_at': datetime.now().strftime('%d-%m-%Y %I:%M %p'),
+                  'source_text': text[:5000],
+                  'numbers': numbers,
+                  'raw': text[:1000]
+              }
+              with open('result.json','w') as f:
+                  json.dump(data, f, indent=2)
+
+              if os.path.exists('karunya.html'):
+                  with open('karunya.html','r',encoding='utf-8',errors='ignore') as f:
+                      html = f.read()
+                  new_box = f'<div id=\"live-result\"><h2>Karunya Plus KN-650 - {data[\"date\"]}</h2><p>{text[:2000]}</p><p>Updated: {data[\"updated_at\"]}</p></div>'
+                  if 'id=\"live-result\"' in html:
+                      html = re.sub(r'<div id=\"live-result\">.*?</div>', new_box, html, flags=re.DOTALL)
+                  else:
+                      html = html.replace('</body>', new_box + '</body>')
+                  with open('karunya.html','w',encoding='utf-8') as f:
+                      f.write(html)
+                  print('karunya.html updated')
+              else:
+                  print('karunya.html not found, result.json only updated')
+
           except Exception as e:
               print('Error', e)
           "
+
       - name: Commit
         run: |
           git config user.name "Auto Bot"
           git config user.email "bot@keralalive.com"
           git add .
-          git commit -m "Auto check 3:15 PM" || echo "No change"
+          git commit -m "Auto update 3:15 PM" || echo "No change"
           git push
