@@ -50,15 +50,19 @@ body{background:#eef2f5;padding-bottom:20px}
 <p>⏰ Today Result - 3 PM Live Update</p>
 </div>
   
-<!-- CLEAN SEARCH BOX - NO BLUE -->
-<div style="background:#fff;padding:14px 14px 12px 14px;margin:10px;border-radius:14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.08);border:1px solid #e5e5e5">
-<div style="font-size:19px;font-weight:800;color:#111;">🔍 Ticket Search</div>
-<div style="font-size:11px;color:#777;margin:2px 0 10px 0;">SERIAL NUMBER / LOTTERY NAME ADIKKUKA</div>
-<input id="q" placeholder="SA286401 / SS-546" style="width:92%;padding:11px;font-size:16px;font-weight:600;border:1.5px solid #ccc;border-radius:11px;text-align:center;text-transform:uppercase;outline:none;background:#fafafa">
-<br>
-<button onclick="searchNow()" style="margin-top:10px;padding:9px 30px;font-size:16px;font-weight:700;background:#111;color:white;border:none;border-radius:11px;cursor:pointer;">Search</button>
-<div id="out"></div>
+<!-- CLEAN SEARCH BOX - LIKE SCREENSHOT -->
+<div style="background:#fff; padding:12px 10px; border-radius:14px; border:1px solid #eee; display:flex; gap:10px; align-items:center; justify-content:center;">
+
+  <input id="q" placeholder="SA286401 / SS-546" 
+    style="flex:1; padding:13px 15px; border:1.5px solid #a5dcf0; border-radius:10px; outline:none; font-size:16px; background:#fff;">
+
+  <button onclick="searchNow()" 
+    style="background:#00a8e8; color:white; border:none; padding:13px 22px; border-radius:10px; font-size:19px; font-weight:700; cursor:pointer; white-space:nowrap;">
+    Search
+  </button>
+
 </div>
+<div id="out"></div>
 
 <script>
 const lotteries=[
