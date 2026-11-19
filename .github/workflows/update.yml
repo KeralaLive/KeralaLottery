@@ -19,10 +19,9 @@ jobs:
           html = open('KarunyaPlusKN-650Result.html', encoding='utf-8').read()
           bad = ['Skip to content','Menu','Home','updated daily at 3:00 PM','weekly chart','monthly chart','guessing numbe','Kerala Jackpot','Result Chart']
           for b in bad:
-              # ആ line മുഴുവൻ കളയുക
-              lines = [l for l in html.splitlines() if b not in l]
-              html = '\n'.join(lines)
-          open('KarunyaPlusKN-650Result.html','w',encoding='utf-8').write(html)
+    lines = [l for l in html.splitlines() if b not in l]
+    html = '\n'.join(lines)
+    open('KarunyaPlusKN-650Result.html','w',encoding='utf-8').write(html)
           print('Cleaned OK')
           "
       - name: Save
