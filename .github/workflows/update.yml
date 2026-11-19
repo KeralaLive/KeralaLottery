@@ -1,0 +1,22 @@
+name: Auto Lottery Update
+on:
+  schedule:
+    - cron: '45 9 * * *'  # 3:15 PM IST
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update Result
+        run: |
+          echo "Checking result..."
+          # Ividunnu result fetch cheyyum
+      - name: Commit
+        run: |
+          git config user.name "Auto Bot"
+          git config user.email "bot@keralalive.com"
+          git add .
+          git commit -m "Auto update 3:15 PM" || echo "No change"
+          git push
