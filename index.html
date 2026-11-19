@@ -49,7 +49,40 @@ body{background:#eef2f5;padding-bottom:20px}
 <h1>Kerala<br><span>Lottery Result Live</span></h1>
 <p>⏰ Today Result - 3 PM Live Update</p>
 </div>
+  
+<!-- SEARCH BOX -->
+<div style="background:#fff;padding:15px;margin:12px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+<h3 style="margin:0 0 10px 0;">🔍 Ticket Search</h3>
+<input id="q" placeholder="SA286401 / SS-546" style="width:92%;padding:13px;font-size:17px;border:2px solid #007bff;border-radius:8px;text-align:center;text-transform:uppercase">
+<br><button onclick="searchNow()" style="margin-top:10px;padding:11px 25px;font-size:17px;background:#007bff;color:white;border:none;border-radius:8px;">Search</button>
+<div id="out"></div>
+</div>
 
+<script>
+const lotteries=[
+{names:["STHREE","SHAKTHI","SAKTHI","SS546","SS"],title:"Sthree Shakthi SS-546",date:"17-11-2026",link:"sthree-sakthi-ss-546-17-11-2026.html",numbers:{"SA286401":"1st Prize - Rs.1 Crore","SG329117":"2nd Prize - Rs.30 Lakh","SL682449":"3rd Prize - Rs.5 Lakh"}},
+{names:["DHANA","DHANALEKSHMI","DL78","DL"],title:"Dhanalekshmi DL-78",date:"18-11-2026",link:"dhanalekshmi-dl-78-result.html",numbers:{"DLXXXXXX":"1st Prize - Rs.1 Crore"}}
+];
+function clean(s){return s.toUpperCase().replace(/[^A-Z0-9]/g,"");}
+function searchNow(){
+let input=document.getElementById("q").value.trim();
+let q=clean(input);
+let out=document.getElementById("out");
+if(!q){out.innerHTML="Ticket Number adikkuka!";return;}
+for(let l of lotteries){
+for(let num in l.numbers){
+if(q===clean(num)||(q.length===6&&clean(num).endsWith(q))){
+out.innerHTML=`<div onclick="window.location.href='${l.link}'" style="background:#d4edda;color:#155724;padding:15px;border-radius:10px;margin-top:12px;cursor:pointer">🎉 CONGRATS! PRIZE KITTI!<br><b>${l.title}</b><br>Ticket: ${num}<br><b>${l.numbers[num]}</b><br><br><button style="padding:10px 20px;background:#28a745;color:white;border:none;border-radius:8px;">👉 Full Result Kanuka</button></div>`;return;
+}}}
+for(let l of lotteries){
+for(let n of l.names){
+if(q.includes(clean(n))||clean(n).includes(q)){
+out.innerHTML=`<div onclick="window.location.href='${l.link}'" style="background:#fff3cd;padding:15px;border-radius:10px;margin-top:12px;cursor:pointer;border:2px solid #ffc107"><b>🎉 ${l.title} Result Undu!</b><br>Date: ${l.date}<br><br><button style="padding:10px 20px;background:#007bff;color:white;border:none;border-radius:8px;">👉 Full Result Kanuka</button></div>`;return;
+}}}
+out.innerHTML=`<div style="background:#f8d7da;color:#721c24;padding:12px;border-radius:10px;margin-top:12px">😔 Result il ithu kittiyilla.<br>${input}</div>`;
+}
+</script>
+<!-- SEARCH BOX END -->
 <div class="menuBtn" onclick="toggleMenu()">☰ MENU - RESULTS <span>▼</span></div>
 <div class="menuList" id="menuList">
 <a href="#">🏠 <b>HOME</b></a>
