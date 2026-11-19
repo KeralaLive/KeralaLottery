@@ -3,7 +3,6 @@ on:
   schedule:
     - cron: '35 18 * * *'
   workflow_dispatch:
-
 jobs:
   create:
     runs-on: ubuntu-latest
@@ -17,26 +16,28 @@ jobs:
           import datetime, re
           tomorrow = datetime.date.today() + datetime.timedelta(days=1)
           schedule = {
-            0: ("Bhagyathara", "bt"),
-            1: ("Sthree Sakthi", "ss"),
-            2: ("Dhanalekshmi", "dl"),
-            3: ("Karunya Plus", "kn"),
-            4: ("Suvarna Keralam", "sk"),
-            5: ("Karunya", "kr"),
-            6: ("Samrudhi", "sm"),
+              0: ("Bhagyathara", "bt"),
+              1: ("Sthree Sakthi", "ss"),
+              2: ("Dhanalekshmi", "dl"),
+              3: ("Karunya Plus", "kn"),
+              4: ("Suvarna Keralam", "sk"),
+              5: ("Karunya", "kr"),
+              6: ("Samrudhi", "sm"),
           }
           name, code = schedule[tomorrow.weekday()]
           slug = name.lower().replace(' ', '-')
           filename = f"{slug}-{code}-{tomorrow.strftime('%d-%m-%Y')}-result.html"
-          with open("KarunyaPlusKN-650Result.html", "r", encoding="utf-8") as f:
+          with open("KarunyaPlusKN-650Result.html", encoding="utf-8") as f:
               content = f.read()
-          # Ella style um maattuka - CAPITAL, small, ellaam
-          content = re.sub(r'Karunya Plus KN-650', f"{name} - {tomorrow.strftime('%d-%m-%Y')}", content, flags=re.I)
-          content = re.sub(r'Karunya Plus', name, content, flags=re.I)
-          content = re.sub(r'KN-650', f"{code.upper()}", content, flags=re.I)
+          content = re.sub(r'Karunya Plus KN-650', f'{name} {code.upper()}', content)
+          content = re.sub(r'Karunya Plus', name, content)
+          content = re.sub(r'KN-650', f'{code.upper()}-78', content)
           content = re.sub(r'19 November 2026', tomorrow.strftime('%d %B %Y'), content)
           content = re.sub(r'19-11-2026', tomorrow.strftime('%d-%m-%Y'), content)
-          content = re.sub(r'UPDATE SOON', 'UPDATE SOON', content)
+          content = re.sub(r'19-11', tomorrow.strftime('%d-%m'), content)
+          content = re.sub(r'UPDATE SOON', 'UPCOMING', content)
+          content = re.sub(r'Thursday|Friday|Saturday|Sunday|Monday|Tuesday|Wednesday', tomorrow.strftime('%A'), content)
+          content = re.sub(r'(\d{2}-\d{2}-\d{4})\s*-\s*\1', r'\1', content)
           with open(filename, "w", encoding="utf-8") as f:
               f.write(content)
           print(f"Created {filename}")
@@ -44,7 +45,7 @@ jobs:
       - name: Save
         run: |
           git config user.name "Auto Bot"
-          git config user.email "bot@keralalive.com"
+          git config user.email "bot@keralalive.github.io"
           git add .
-          git commit -m "Auto create tomorrow page" || echo "No change"
+          git commit -m "Auto create tomorrow page" || echo "No changes"
           git push
