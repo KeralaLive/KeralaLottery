@@ -27,11 +27,16 @@ jobs:
           }
           name, code = schedule[tomorrow.weekday()]
           slug = name.lower().replace(' ', '-')
-          # Nalaathe date + result
           filename = f"{slug}-{code}-{tomorrow.strftime('%d-%m-%Y')}-result.html"
           with open("KarunyaPlusKN-650Result.html", "r", encoding="utf-8") as f:
               content = f.read()
-          content = content.replace("Karunya Plus KN-650", f"{name} - {tomorrow.strftime('%d-%m-%Y')}")
+          # Ella style um maattuka - CAPITAL, small, ellaam
+          content = re.sub(r'Karunya Plus KN-650', f"{name} - {tomorrow.strftime('%d-%m-%Y')}", content, flags=re.I)
+          content = re.sub(r'Karunya Plus', name, content, flags=re.I)
+          content = re.sub(r'KN-650', f"{code.upper()}", content, flags=re.I)
+          content = re.sub(r'19 November 2026', tomorrow.strftime('%d %B %Y'), content)
+          content = re.sub(r'19-11-2026', tomorrow.strftime('%d-%m-%Y'), content)
+          content = re.sub(r'UPDATE SOON', 'UPDATE SOON', content)
           with open(filename, "w", encoding="utf-8") as f:
               f.write(content)
           print(f"Created {filename}")
