@@ -1,20 +1,27 @@
-name: Create Tomorrow Page
+name: Lottery Update
 on:
   schedule:
-    - cron: '35 18 * * *'
+    - cron: '35 9 * * *'
   workflow_dispatch:
+    inputs:
+      first_prize:
+        description: '1st Prize Number'
+        required: true
+      second_prize:
+        description: '2nd Prize Number'
+        required: false
 jobs:
-  create:
+  update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Create Page From Dummy Template
+      - name: Update Today Result
         run: |
           python3 << 'PY'
-          import datetime
-          tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+          import datetime, glob, os
+          today = datetime.date.today()
           schedule = {
             0: ("Bhagyathara", "BT"),
             1: ("Sthree Sakthi", "SS"),
@@ -24,22 +31,30 @@ jobs:
             5: ("Karunya", "KR"),
             6: ("Samrudhi", "SM"),
           }
-          name, code = schedule[tomorrow.weekday()]
+          name, code = schedule[today.weekday()]
           slug = name.lower().replace(' ', '-')
-          filename = f"{slug}-{code}-{tomorrow.strftime('%d-%m-%Y')}Result.html"
-          with open("template.html") as f:
+          filename = f"{slug}-{code}-{today.strftime('%d-%m-%Y')}Result.html"
+          print(f"Updating {filename}")
+          if not os.path.exists(filename):
+              print("File not found, skipping")
+              exit(0)
+          with open(filename) as f:
               content = f.read()
-          content = content.replace("__NAME__", name)
-          content = content.replace("__CODE__", code)
-          content = content.replace("__DATE__", tomorrow.strftime('%d-%m-%Y'))
+          first = "${{ github.event.inputs.first_prize }}"
+          second = "${{ github.event.inputs.second_prize }}"
+          if first:
+              content = content.replace("Result Coming Soon", first, 1)
+          if second:
+              content = content.replace("Result Coming Soon", second, 1)
+          content = content.replace("COMING SOON", "RESULT DECLARED")
           with open(filename, "w") as f:
               f.write(content)
-          print(f"Created {filename}")
+          print("Updated!")
           PY
       - name: Save
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Create tomorrow page" || echo "No changes"
+          git commit -m "Update today result" || echo "No changes"
           git push
