@@ -1,33 +1,45 @@
-name: Lottery Update
+name: Create Tomorrow Page
 on:
   schedule:
-    - cron: '45 9 * * *'
+    - cron: '35 18 * * *'
   workflow_dispatch:
-permissions:
-  contents: write
 jobs:
-  update:
+  create:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Clean Only
+      - name: Create Page From Dummy Template
         run: |
           python3 << 'PY'
-          import pathlib
-          p = pathlib.Path('KarunyaPlusKN-650Result.html')
-          html = p.read_text(encoding='utf-8')
-          bad = ['Skip to content', 'Menu', 'updated daily']
-          lines = [l for l in html.splitlines() if not any(b in l for b in bad)]
-          p.write_text('\n'.join(lines), encoding='utf-8')
-          print('Cleaned OK')
+          import datetime
+          tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+          schedule = {
+            0: ("Bhagyathara", "BT"),
+            1: ("Sthree Sakthi", "SS"),
+            2: ("Dhanalekshmi", "DL"),
+            3: ("Karunya Plus", "KN"),
+            4: ("Suvarna Keralam", "SK"),
+            5: ("Karunya", "KR"),
+            6: ("Samrudhi", "SM"),
+          }
+          name, code = schedule[tomorrow.weekday()]
+          slug = name.lower().replace(' ', '-')
+          filename = f"{slug}-{code}-{tomorrow.strftime('%d-%m-%Y')}Result.html"
+          with open("template.html") as f:
+              content = f.read()
+          content = content.replace("__NAME__", name)
+          content = content.replace("__CODE__", code)
+          content = content.replace("__DATE__", tomorrow.strftime('%d-%m-%Y'))
+          with open(filename, "w") as f:
+              f.write(content)
+          print(f"Created {filename}")
           PY
       - name: Save
         run: |
-          git config user.name 'bot'
-          git config user.email 'bot@bot.com'
-          git add KarunyaPlusKN-650Result.html
-          git commit -m 'clean junk' || echo 'no change'
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Create tomorrow page" || echo "No changes"
           git push
