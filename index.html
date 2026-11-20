@@ -73,27 +73,19 @@ body{background:#eef2f5;padding-bottom:20px}
 <div id="out"></div>
 
 <script>
-const lotteries=[
-{names:["STHREE","SHAKTHI","SAKTHI","SS546","SS"],title:"Sthree Shakthi SS-546",date:"17-11-2026",link:"sthree-sakthi-ss-546-17-11-2026.html",numbers:{"SA286401":"1st Prize - Rs.1 Crore","SG329117":"2nd Prize - Rs.30 Lakh","SL682449":"3rd Prize - Rs.5 Lakh"}},
-{names:["DHANA","DHANALEKSHMI","DL78","DL"],title:"Dhanalekshmi DL-78",date:"18-11-2026",link:"dhanalekshmi-dl-78-result.html",numbers:{"DLXXXXXX":"1st Prize - Rs.1 Crore"}}
-];
-function clean(s){return s.toUpperCase().replace(/[^A-Z0-9]/g,"");}
 function searchNow(){
-let input=document.getElementById("q").value.trim();
-let q=clean(input);
-let out=document.getElementById("out");
-if(!q){out.innerHTML="<div style='margin-top:10px;color:#e60000;font-weight:700;font-size:14px'>Ticket Number adikkuka!</div>";return;}
-for(let l of lotteries){
-for(let num in l.numbers){
-if(q===clean(num)||(q.length===6&&clean(num).endsWith(q))){
-out.innerHTML=`<div onclick="window.location.href='${l.link}'" style="background:#d4edda;color:#155724;padding:13px;border-radius:12px;margin-top:10px;cursor:pointer">🎉 <b>CONGRATS! PRIZE KITTI!</b><br><b>${l.title}</b><br>Ticket: ${num}<br><b>${l.numbers[num]}</b><br><br><button style="padding:8px 18px;background:#111;color:white;border:none;border-radius:9px;font-weight:700;">👉 Full Result Kanuka</button></div>`;return;
-}}}
-for(let l of lotteries){
-for(let n of l.names){
-if(q.includes(clean(n))||clean(n).includes(q)){
-out.innerHTML=`<div onclick="window.location.href='${l.link}'" style="background:#f5f5f5;padding:13px;border-radius:12px;margin-top:10px;cursor:pointer;border:1px solid #ddd"><b>🎉 ${l.title} Result Undu!</b><br>Date: ${l.date}<br><br><button style="padding:8px 18px;background:#111;color:white;border:none;border-radius:9px;font-weight:700;">👉 Full Result Kanuka</button></div>`;return;
-}}}
-out.innerHTML=`<div style="background:#f8d7da;color:#721c24;padding:10px;border-radius:10px;margin-top:10px;font-size:14px">😔 Result il ithu kittiyilla.<br>${input}</div>`;
+  let q = document.getElementById("q").value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+  let out = document.getElementById("out");
+  if(!q){ out.innerHTML=""; return; }
+  let found = "";
+  document.querySelectorAll("a").forEach(a=>{
+    let txt = a.innerText.toUpperCase().replace(/[^A-Z0-9]/g,"");
+    let link = a.getAttribute("href") || "";
+    if(txt && (txt.includes(q) || link.toUpperCase().replace(/[^A-Z0-9]/g,"").includes(q))){
+      found += '<div onclick="window.location.href=\''+link+'\'" style="margin-top:10px;background:#fff;padding:12px;border-radius:10px;cursor:pointer;font-weight:700">'+a.innerText+'</div>';
+    }
+  });
+  out.innerHTML = found || '<div style="margin-top:10px;color:#e60000;font-weight:700">😔 Result il ithu kittiyilla.</div>';
 }
 </script>
 <!-- CLEAN BOX END -->
