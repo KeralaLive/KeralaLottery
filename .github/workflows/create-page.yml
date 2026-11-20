@@ -10,42 +10,36 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Create Page
+      - name: Create Page From Dummy Template
         run: |
           python3 << 'PY'
-          import datetime, re
+          import datetime
           tomorrow = datetime.date.today() + datetime.timedelta(days=1)
           schedule = {
-              0: ("Bhagyathara", "bt"),
-              1: ("Sthree Sakthi", "ss"),
-              2: ("Dhanalekshmi", "dl"),
-              3: ("Karunya Plus", "kn"),
-              4: ("Suvarna Keralam", "sk"),
-              5: ("Karunya", "kr"),
-              6: ("Samrudhi", "sm"),
+            0: ("Bhagyathara", "BT"),
+            1: ("Sthree Sakthi", "SS"),
+            2: ("Dhanalekshmi", "DL"),
+            3: ("Karunya Plus", "KN"),
+            4: ("Suvarna Keralam", "SK"),
+            5: ("Karunya", "KR"),
+            6: ("Samrudhi", "SM"),
           }
           name, code = schedule[tomorrow.weekday()]
           slug = name.lower().replace(' ', '-')
-          filename = f"{slug}-{code}-{tomorrow.strftime('%d-%m-%Y')}-result.html"
-          with open("KarunyaPlusKN-650Result.html", encoding="utf-8") as f:
+          filename = f"{slug}-{code}-{tomorrow.strftime('%d-%m-%Y')}Result.html"
+          with open("template.html") as f:
               content = f.read()
-          content = re.sub(r'Karunya Plus KN-650', f'{name} {code.upper()}', content)
-          content = re.sub(r'Karunya Plus', name, content)
-          content = re.sub(r'KN-650', f'{code.upper()}-78', content)
-          content = re.sub(r'19 November 2026', tomorrow.strftime('%d %B %Y'), content)
-          content = re.sub(r'19-11-2026', tomorrow.strftime('%d-%m-%Y'), content)
-          content = re.sub(r'19-11', tomorrow.strftime('%d-%m'), content)
-          content = re.sub(r'UPDATE SOON', 'UPCOMING', content)
-          content = re.sub(r'Thursday|Friday|Saturday|Sunday|Monday|Tuesday|Wednesday', tomorrow.strftime('%A'), content)
-          content = re.sub(r'(\d{2}-\d{2}-\d{4})\s*-\s*\1', r'\1', content)
-          with open(filename, "w", encoding="utf-8") as f:
+          content = content.replace("__NAME__", name)
+          content = content.replace("__CODE__", code)
+          content = content.replace("__DATE__", tomorrow.strftime('%d-%m-%Y'))
+          with open(filename, "w") as f:
               f.write(content)
           print(f"Created {filename}")
           PY
       - name: Save
         run: |
-          git config user.name "Auto Bot"
-          git config user.email "bot@keralalive.github.io"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
           git add .
-          git commit -m "Auto create tomorrow page" || echo "No changes"
+          git commit -m "Create tomorrow page" || echo "No changes"
           git push
