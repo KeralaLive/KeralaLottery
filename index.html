@@ -124,7 +124,24 @@ function searchNow(){
 <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin:10px 12px;">
 <h3 style="margin:0 0 12px 0;font-size:16px;font-weight:700;color:#111;">🕒 Recent Results</h3>
 
-<div id="recent-box"></div>
+const results = [
+  { n: "KARUNYA KR-777", d: "21.11.2026", l: "karunya-kr-21-11-2026-result.html" },
+  { n: "SUVARNA KERALAM SK-78", d: "20.11.2026", l: "suvarna-keralam-sk-20-11-2026-result.html" }
+];
+
+const live = document.getElementById("live-box");
+if (live) {
+  live.innerHTML = "<b>" + results[0].n + "</b><br>" + results[0].d;
+}
+
+const recent = document.getElementById("recent-box");
+if (recent) {
+  let html = "";
+  for (let i = 1; i < results.length; i++) {
+    html += "<div><b>" + results[i].n + "</b><br>" + results[i].d + "</div><hr>";
+  }
+  recent.innerHTML = html;
+}
 </div>
 
 <div class="section"><h3>📅 This Week Schedule</h3>
@@ -166,6 +183,6 @@ var m=document.getElementById('menuList');
 m.style.display = m.style.display==='block' ? 'none' : 'block';
 }
 </script>
-<script src="results.js"></script>
+
 </body>
 </html>
