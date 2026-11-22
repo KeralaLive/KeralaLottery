@@ -77,17 +77,11 @@ body{background:#eef2f5;padding-bottom:20px}
 </style>
   
 <!-- CLEAN SEARCH BOX - LIKE SCREENSHOT -->
-<div style="background:#fff; padding:12px 10px; border-radius:14px; border:1px solid #eee; display:flex; gap:10px; align-items:center; justify-content:center;">
-
-  <input id="q" placeholder="SA286401 / SS-546" 
-    style="flex:1; padding:13px 15px; border:1.5px solid #a5dcf0; border-radius:10px; outline:none; font-size:16px; background:#fff;">
-
-  <button onclick="searchNow()" 
-    style="background:#00a8e8; color:white; border:none; padding:13px 22px; border-radius:10px; font-size:19px; font-weight:700; cursor:pointer; white-space:nowrap;">
-    Search
-  </button>
-
+<div style="background:white; display:flex; align-items:center; gap:8px; padding:6px 6px 6px 20px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
+  <input id="q" type="text" placeholder="Ticket or series, e.g. SA286401" style="flex:1; border:none; outline:none; font-size:17px; background:transparent; color:#333;">
+  <button onclick="searchNow()" style="background:#6D6CF2; color:white; border:none; padding:13px 24px; border-radius:14px; font-size:17px; font-weight:bold; cursor:pointer;">Search</button>
 </div>
+<div id="out"></div>
 <div id="out"></div>
 
 <script>
