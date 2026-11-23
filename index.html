@@ -243,6 +243,16 @@ m.style.display = m.style.display==='block' ? 'none' : 'block';
 }
 </script>
 
+<script>
+// Recent - 5 mathram kanikkan
+const allRecent = document.querySelectorAll('div[style*="#f0fdf4"]');
+allRecent.forEach((el, i) => {
+  if (i >= 5) el.style.display = 'none';
+});
+</script>
+
+<div class="Title" align="center">
+
 <div class="Title" align="center">
   © DailyKeralaLotteryResult.Vip <br>
   ♣ Daily New Updates ♣
