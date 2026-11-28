@@ -85,19 +85,12 @@ body{background:#fff7ed;padding-bottom:20px}
 <button class="btn" onclick="window.location.href='/'">← Back to Home</button>
 </div>
 
-<div class="search">
-<input id="q" type="text" placeholder="Ticket no: e.g. PA123456">
-<button onclick="searchNow()">Search</button>
+<div class="live" style="border:2px solid #C0C0C0;box-shadow:0 10px 30px rgba(0,0,0,0.08);margin-top:16px;">
+<div class="blink" style="background:#F2F2F2;padding:8px 14px;border-radius:20px;display:inline-block;">🥈 2nd PRIZE DECLARED</div>
+<h2 style="font-size:22px;margin:14px 0 5px;">2nd Prize - ₹50 LAKH</h2>
+<div class="num" style="font-size:42px;color:#555;letter-spacing:1px;">BR ------</div>
+<p style="font-size:13px;color:#666;margin:10px 0 0;">10 Winners - Full list thazhe</p>
 </div>
-<div id="out" style="margin:0 14px;font-weight:700"></div>
-<script>
-function searchNow(){
-let q=document.getElementById("q").value.toUpperCase().replace(/[^A-Z0-9]/g,"");
-let out=document.getElementById("out");
-if(!q){out.innerHTML="";return;}
-out.innerHTML="😔 Result il ithu kittiyilla.";
-}
-</script>
 
 <div class="card">
 <h3>🏆 Prize Structure - Pooja Bumper BR-112</h3>
